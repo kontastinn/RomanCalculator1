@@ -1,0 +1,42 @@
+            int result = 0;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                string current = value[i].ToString();
+                if (current == "M")
+                {
+                    result += 1000;
+                    i++;                   
+                }
+                if (current == "D") 
+                {
+                    result += 500;
+                    i++;
+                }
+                if(current == "C") 
+                {
+                    result += 100;
+                    i++;
+                }
+                if (current == "L")
+                {
+                    result += 50;
+                    i++;
+                }
+                if (current == "X")
+                {
+                    result += 10;
+                    i++;
+                }
+                if (current == "V")
+                {
+                    result += 5;
+                    i++;
+                }
+                if (current == "I")
+                {
+                    result += 1;
+                    i++;
+                }
+
+            }
