@@ -19,9 +19,9 @@ namespace RomanCalculator
         /// </summary>
         static void RomanCalulate()
         {
-            int answer = 1;
+            string answer = "yes";
 
-            while (answer == 1)
+            while (answer == "yes")
             {
                 indexData = 0;
                 Data[0] = 0;
@@ -34,7 +34,7 @@ namespace RomanCalculator
                     indexData++;
                     Console.Write("\nEnter second Roman value: ");
                     RomanToInt();
-                    Console.WriteLine("\nChoose math operaton:\n1 - plus;\n2 - minus;\n1 - multiply;\n1 - divide;\n");
+                    Console.WriteLine("\nChoose math operaton:\n1 - plus\n2 - minus\n3 - multiply\n4 - divide (returns only int value)\n");
                     Console.Write("Enter here: ");
                     string answer1 = Console.ReadLine();
                     if (answer1 == "1")
@@ -47,24 +47,59 @@ namespace RomanCalculator
                         dataResult = Data[0] / Data[1];
                     else
                     {
-                        Console.WriteLine("You chose wrong option");
+                        Console.WriteLine("\nYou chose wrong option, try again");
                         Console.ReadLine();
                         Console.Clear();
-                        return;
+                        continue;
                     }
                     Console.Write("\nYour result is : ");
                     IntToRoman();
-                    Console.WriteLine("\n\nIf you wanna try again choose option:\n 1 - yes, i want;\n 2 - that is enough, baby ");
-                    answer = int.Parse(Console.ReadLine());
+                    Console.Write("\n\nIf you wanna try again enter \"yes\": ");
+                    answer = (Console.ReadLine());
                 }
                 catch
                 {
-                    Console.WriteLine("You entered wrong value, try again");
+                    Console.WriteLine("\nyou entered wrong value, try again");
                     Console.ReadLine();
                     Console.Clear();
                 }
+                Console.WriteLine();
             }
 
+        }
+
+        /// <summary>
+        /// Converting Roman value to int
+        /// </summary>
+        /// <param name="romanValue"></param>
+        /// <returns></returns>
+        static void RomanToInt()
+        {
+            string romanValue = Console.ReadLine();
+            Dictionary<char, int> romanNumbersDictionary = new()
+            {
+                {'I', 1  },
+                {'V', 5  },
+                {'X', 10  },
+                {'L', 50  },
+                {'C', 100 },
+                {'D', 500 },
+                {'M', 1000}
+            };
+            for (int i = 0; i < romanValue.Length; i++)
+            {
+                char currentRomanChar = romanValue[i];
+                romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
+
+                if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
+                {
+                    Data[indexData] -= currentNumber;
+                }
+                else
+                {
+                    Data[indexData] += currentNumber;
+                }
+            }
         }
 
         /// <summary>
@@ -105,39 +140,6 @@ namespace RomanCalculator
             Console.Write(romanResult);
         }
 
-        /// <summary>
-        /// Converting Roman value to int
-        /// </summary>
-        /// <param name="romanValue"></param>
-        /// <returns></returns>
-        static void RomanToInt()
-        {
-            string romanValue = Console.ReadLine();
-            Dictionary<char, int> romanNumbersDictionary = new()
-            {
-                {'I', 1  },
-                {'V', 5  },
-                {'X', 10  },
-                {'L', 50  },
-                {'C', 100 },
-                {'D', 500 },
-                {'M', 1000}
-            };
-            for (int i = 0; i < romanValue.Length; i++)
-            {
-                char currentRomanChar = romanValue[i];
-                romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
-
-                if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
-                {
-                    Data[indexData] -= currentNumber;
-                }
-                else
-                {
-                    Data[indexData] += currentNumber;
-                }
-            }
-        }
         static void Main()
         {
             RomanCalulate();
