@@ -11,6 +11,9 @@ namespace RomanCalculator
 
     class RomanCalculator
     {
+        /// <summary>
+        /// Calculates Roman Numbers
+        /// </summary>
         public void RomanCalculate() 
         {
             string answer = "yes";
