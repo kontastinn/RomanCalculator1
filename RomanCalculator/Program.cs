@@ -147,8 +147,8 @@ namespace RomanCalculator
     {       
         static void Main()
         {
-            RomanCalculator str = new RomanCalculator();
-            str.RomanCalculate();
+            RomanCalculator romanCalculator = new RomanCalculator();
+            romanCalculator.RomanCalculate();
         }
     }
 }
