@@ -8,43 +8,41 @@ using System.Xml;
 
 namespace RomanCalculator
 {
-    internal class Program
-    {
-        private static int[] Data = new int[2];
-        private static int indexData;
-        private static int dataResult;
 
-        /// <summary>
-        /// Calculating two Roman values
-        /// </summary>
-        static void RomanCalulate()
+    class RomanCalculator
+    {
+        public void RomanCalculate() 
         {
             string answer = "yes";
-
             while (answer == "yes")
             {
-                indexData = 0;
-                Data[0] = 0;
-                Data[1] = 0;
-                Console.Clear();
+                string romanNumber;
+                int[] arabicData = new int[2];
+                int arabicDataIndex = 0;
+                int arabicResult = 0;
                 try
                 {
+                    Console.Clear();
                     Console.Write("Enter first Roman value: ");
-                    RomanToInt();
-                    indexData++;
-                    Console.Write("\nEnter second Roman value: ");
-                    RomanToInt();
+                    romanNumber = Console.ReadLine();
+                    arabicData[arabicDataIndex] = RomanToInt(romanNumber);
+                    arabicDataIndex++;
+
+                    Console.Write("Enter second Roman value: ");
+                    romanNumber = Console.ReadLine();
+                    arabicData[arabicDataIndex] = RomanToInt(romanNumber);
+
                     Console.WriteLine("\nChoose math operaton:\n1 - plus\n2 - minus\n3 - multiply\n4 - divide (returns only int value)\n");
                     Console.Write("Enter here: ");
                     string answer1 = Console.ReadLine();
                     if (answer1 == "1")
-                        dataResult = Data[0] + Data[1];
+                        arabicResult = arabicData[0] + arabicData[1];
                     else if (answer1 == "2")
-                        dataResult = Data[0] - Data[1];
+                        arabicResult = arabicData[0] - arabicData[1];
                     else if (answer1 == "3")
-                        dataResult = Data[0] * Data[1];
+                        arabicResult = arabicData[0] * arabicData[1];
                     else if (answer1 == "4")
-                        dataResult = Data[0] / Data[1];
+                        arabicResult = arabicData[0] / arabicData[1];
                     else
                     {
                         Console.WriteLine("\nYou chose wrong option, try again");
@@ -52,8 +50,7 @@ namespace RomanCalculator
                         Console.Clear();
                         continue;
                     }
-                    Console.Write("\nYour result is : ");
-                    IntToRoman();
+                    Console.Write("\nYour result is " + IntToRoman(arabicResult));
                     Console.Write("\n\nIf you wanna try again enter \"yes\": ");
                     answer = (Console.ReadLine());
                 }
@@ -64,18 +61,22 @@ namespace RomanCalculator
                     Console.Clear();
                 }
                 Console.WriteLine();
+
+
+
             }
+
 
         }
 
         /// <summary>
-        /// Converting Roman value to int
+        /// Converting Roman number to int
         /// </summary>
         /// <param name="romanValue"></param>
         /// <returns></returns>
-        static void RomanToInt()
+        public int RomanToInt(string romanValue)
         {
-            string romanValue = Console.ReadLine();
+            int arabicNumber = 0;
             Dictionary<char, int> romanNumbersDictionary = new()
             {
                 {'I', 1  },
@@ -93,20 +94,22 @@ namespace RomanCalculator
 
                 if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
                 {
-                    Data[indexData] -= currentNumber;
+                    arabicNumber -= currentNumber;
                 }
                 else
                 {
-                    Data[indexData] += currentNumber;
+                    arabicNumber += currentNumber;
                 }
+
             }
+            return arabicNumber;
         }
 
         /// <summary>
-        /// Converting int to Roman value
+        /// Converting int to Roman number
         /// </summary>
         /// <param name="value"></param>
-        static void IntToRoman()
+        static string IntToRoman(int arabicNumber)
         {
             string romanResult = string.Empty;
             Dictionary<string, int> romanNumbersDictionary = new()
@@ -125,24 +128,27 @@ namespace RomanCalculator
                 {"CM",900 },
                 {"M", 1000}
             };
-            if (dataResult == 0)
+            if (arabicNumber == 0)
             {
                 romanResult = "0";
             }
             foreach (var item in romanNumbersDictionary.Reverse())
             {
-                while (dataResult > 0 && dataResult >= item.Value)
+                while (arabicNumber > 0 && arabicNumber >= item.Value)
                 {
-                    dataResult -= item.Value;
+                    arabicNumber -= item.Value;
                     romanResult += item.Key;
                 }
             }
-            Console.Write(romanResult);
+            return romanResult;
         }
-
+    }
+    internal class Program
+    {       
         static void Main()
         {
-            RomanCalulate();
+            RomanCalculator str = new RomanCalculator();
+            str.RomanCalculate();
         }
     }
 }
