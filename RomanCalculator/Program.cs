@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,66 +11,40 @@ namespace RomanCalculator
 {
 
     class RomanCalculator
-    {
+    { 
         /// <summary>
-        /// Calculates Roman Numbers
+        /// Calculates Roman Values
         /// </summary>
-        public void RomanCalculate() 
+        public void RomanCalculate()
         {
-            string answer = "yes";
-            while (answer == "yes")
+            Console.Write("Enter string: ");
+            string enteredRomanValue = Console.ReadLine();
+
+            string[] romanArrayNumbers = enteredRomanValue.Split(new char[] { '+', '-', '*', '/', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            int[] arabicArrayNumbers = new int[romanArrayNumbers.Length];            
+            int index = 0;
+
+            foreach (string romanValue in romanArrayNumbers) 
             {
-                string romanNumber;
-                int[] arabicData = new int[2];
-                int arabicDataIndex = 0;
-                int arabicResult = 0;
-                try
-                {
-                    Console.Clear();
-                    Console.Write("Enter first Roman value: ");
-                    romanNumber = Console.ReadLine();
-                    arabicData[arabicDataIndex] = RomanToInt(romanNumber);
-                    arabicDataIndex++;
-
-                    Console.Write("Enter second Roman value: ");
-                    romanNumber = Console.ReadLine();
-                    arabicData[arabicDataIndex] = RomanToInt(romanNumber);
-
-                    Console.WriteLine("\nChoose math operaton:\n1 - plus\n2 - minus\n3 - multiply\n4 - divide (returns only int value)\n");
-                    Console.Write("Enter here: ");
-                    string answer1 = Console.ReadLine();
-                    if (answer1 == "1")
-                        arabicResult = arabicData[0] + arabicData[1];
-                    else if (answer1 == "2")
-                        arabicResult = arabicData[0] - arabicData[1];
-                    else if (answer1 == "3")
-                        arabicResult = arabicData[0] * arabicData[1];
-                    else if (answer1 == "4")
-                        arabicResult = arabicData[0] / arabicData[1];
-                    else
-                    {
-                        Console.WriteLine("\nYou chose wrong option, try again");
-                        Console.ReadLine();
-                        Console.Clear();
-                        continue;
-                    }
-                    Console.Write("\nYour result is " + IntToRoman(arabicResult));
-                    Console.Write("\n\nIf you wanna try again enter \"yes\": ");
-                    answer = (Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("\nyou entered wrong value, try again");
-                    Console.ReadLine();
-                    Console.Clear();
-                }
-                Console.WriteLine();
-
-
-
+                arabicArrayNumbers[index] = RomanToInt(romanValue);
+                index++;
             }
 
+            string[] mathOperators = enteredRomanValue.Split(new char[] { 'I', 'V', 'X', 'L', 'C', 'D', 'M' }, StringSplitOptions.RemoveEmptyEntries);
+            int result = arabicArrayNumbers[0];
 
+            for (int i = 0, j = 1; i < mathOperators.Length; i++, j++)
+            {
+
+                switch (mathOperators[i])
+                {
+                    case "+": result += arabicArrayNumbers[j]; break;
+                    case "-": result -= arabicArrayNumbers[j]; break;
+                    case "*": result *= arabicArrayNumbers[j]; break;
+                    case "/": result /= arabicArrayNumbers[j]; break;
+                }
+            }
+            Console.WriteLine("\nYour result is "+IntToRoman(result));
         }
 
         /// <summary>
@@ -79,33 +54,32 @@ namespace RomanCalculator
         /// <returns></returns>
         public int RomanToInt(string romanValue)
         {
-            int arabicNumber = 0;
-            Dictionary<char, int> romanNumbersDictionary = new()
+        int arabicNumber = 0;
+        Dictionary<char, int> romanNumbersDictionary = new()
+        {
+            {'I', 1  },
+            {'V', 5  },
+            {'X', 10  },
+            {'L', 50  },
+            {'C', 100 },
+            {'D', 500 },
+            {'M', 1000}
+        };
+        for (int i = 0; i < romanValue.Length; i++)
+        {
+            char currentRomanChar = romanValue[i];
+            romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
+       
+            if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
             {
-                {'I', 1  },
-                {'V', 5  },
-                {'X', 10  },
-                {'L', 50  },
-                {'C', 100 },
-                {'D', 500 },
-                {'M', 1000}
-            };
-            for (int i = 0; i < romanValue.Length; i++)
-            {
-                char currentRomanChar = romanValue[i];
-                romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
-
-                if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
-                {
-                    arabicNumber -= currentNumber;
-                }
-                else
-                {
-                    arabicNumber += currentNumber;
-                }
-
+                arabicNumber -= currentNumber;
             }
-            return arabicNumber;
+            else
+            {
+                arabicNumber += currentNumber;
+            }      
+        }
+        return arabicNumber;
         }
 
         /// <summary>
@@ -147,7 +121,7 @@ namespace RomanCalculator
         }
     }
     internal class Program
-    {       
+    {
         static void Main()
         {
             RomanCalculator romanCalculator = new RomanCalculator();
