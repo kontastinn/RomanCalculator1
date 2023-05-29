@@ -11,7 +11,7 @@ namespace RomanCalculator
 {
 
     class RomanCalculator
-    { 
+    {
         /// <summary>
         /// Calculates Roman Values
         /// </summary>
@@ -21,10 +21,10 @@ namespace RomanCalculator
             string enteredRomanValue = Console.ReadLine();
 
             string[] romanArrayNumbers = enteredRomanValue.Split(new char[] { '+', '-', '*', '/', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            int[] arabicArrayNumbers = new int[romanArrayNumbers.Length];            
+            int[] arabicArrayNumbers = new int[romanArrayNumbers.Length];
             int index = 0;
 
-            foreach (string romanValue in romanArrayNumbers) 
+            foreach (string romanValue in romanArrayNumbers)
             {
                 arabicArrayNumbers[index] = RomanToInt(romanValue);
                 index++;
@@ -35,7 +35,6 @@ namespace RomanCalculator
 
             for (int i = 0, j = 1; i < mathOperators.Length; i++, j++)
             {
-
                 switch (mathOperators[i])
                 {
                     case "+": result += arabicArrayNumbers[j]; break;
@@ -44,7 +43,7 @@ namespace RomanCalculator
                     case "/": result /= arabicArrayNumbers[j]; break;
                 }
             }
-            Console.WriteLine("\nYour result is "+IntToRoman(result));
+            Console.WriteLine("\nYour result is " + IntToRoman(result));
         }
 
         /// <summary>
@@ -54,32 +53,32 @@ namespace RomanCalculator
         /// <returns></returns>
         public int RomanToInt(string romanValue)
         {
-        int arabicNumber = 0;
-        Dictionary<char, int> romanNumbersDictionary = new()
-        {
-            {'I', 1  },
-            {'V', 5  },
-            {'X', 10  },
-            {'L', 50  },
-            {'C', 100 },
-            {'D', 500 },
-            {'M', 1000}
-        };
-        for (int i = 0; i < romanValue.Length; i++)
-        {
-            char currentRomanChar = romanValue[i];
-            romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
-       
-            if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
+            int arabicNumber = 0;
+            Dictionary<char, int> romanNumbersDictionary = new()
             {
-                arabicNumber -= currentNumber;
+                {'I', 1  },
+                {'V', 5  },
+                {'X', 10  },
+                {'L', 50  },
+                {'C', 100 },
+                {'D', 500 },
+                {'M', 1000}
+            };
+            for (int i = 0; i < romanValue.Length; i++)
+            {
+                char currentRomanChar = romanValue[i];
+                romanNumbersDictionary.TryGetValue(currentRomanChar, out int currentNumber);
+           
+                if (i + 1 < romanValue.Length && romanNumbersDictionary[romanValue[i + 1]] > romanNumbersDictionary[currentRomanChar])
+                {
+                    arabicNumber -= currentNumber;
+                }
+                else
+                {
+                    arabicNumber += currentNumber;
+                }
             }
-            else
-            {
-                arabicNumber += currentNumber;
-            }      
-        }
-        return arabicNumber;
+            return arabicNumber;
         }
 
         /// <summary>
